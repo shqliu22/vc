@@ -1,0 +1,71 @@
+---
+default:
+    sr: 16000
+    frame_shift: 0.030 #0.005
+    frame_length:  0.060 #0.025
+    win_length: 960
+    hop_length: 480
+    n_fft: 1440
+    preemphasis: 0.97
+    n_mfcc: 40
+    n_iter: 60 # Number of inversion iterations
+    n_mels: 80
+    duration: 3
+    max_db: 35
+    min_db: -55
+
+    # models
+    hidden_units: 256  # alias: E
+    num_banks: 16
+    num_highway_blocks: 4
+    norm_type: 'ins'  # a normalizer function. value: bn, ln, ins, or None
+    t: 1.0  # temperature
+    dropout_rate: 0.2
+
+    # train
+    batch_size: 32
+
+logdir_path: 'logdir'
+
+---
+train2:
+    # path
+    data_path: 'datasets/speech_region/*.npy'
+
+    # models
+    hidden_units: 256  # alias: E
+    num_banks: 8
+    num_highway_blocks: 8
+    norm_type: 'ins'  # a normalizer function. value: bn, ln, ins, or None
+    t: 1.0  # temperature
+    dropout_rate: 0.2
+
+    # train
+    batch_size: 128 
+    lr: 0.0003
+    lr_cyclic_margin: 0.
+    lr_cyclic_steps: 5000
+    clip_value_max: 3.
+    clip_value_min: -3.
+    clip_norm: 10
+    num_epochs: 10000
+    steps_per_epoch: 100
+    save_per_epoch: 50
+    test_per_epoch: 1
+    num_gpu: 1 
+---
+test2:
+    # path
+    data_path: 'datasets/S0150/S0150_mic/*.npy'
+
+    # test
+    batch_size: 32
+---
+convert:
+    # path
+    data_path: 'datasets/S0252/S0252_mic/*.npy'
+
+    # convert
+    one_full_wav: False
+    batch_size: 32
+    emphasis_magnitude: 1.2
